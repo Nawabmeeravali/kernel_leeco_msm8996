@@ -1025,6 +1025,13 @@ static int lpm_cpuidle_enter(struct cpuidle_device *dev,
 	if (idx < 0)
 		return -EINVAL;
 
+#ifdef CONFIG_HTC_DEBUG_FOOTPRINT
+	level = &cluster->cpu->levels[idx];
+#endif
+
+	if (idx < 0)
+		return -EINVAL;
+
 	pwr_params = &cluster->cpu->levels[idx].pwr;
 
 	cpu_prepare(cluster, idx, true);
@@ -1032,10 +1039,6 @@ static int lpm_cpuidle_enter(struct cpuidle_device *dev,
 
 	trace_cpu_idle_enter(idx);
 	lpm_stats_cpu_enter(idx, start_time);
-
-	if (idx > 0 && cpu_clk && l2_clk)
-		trace_cpu_idle_enter_cpu_freq(dev->cpu, clk_get_rate(cpu_clk),
-					clk_get_rate(l2_clk));
 
 	if (need_resched())
 		goto exit;
@@ -1550,4 +1553,3 @@ void lpm_cpu_hotplug_enter(unsigned int cpu)
 
 	msm_cpu_pm_enter_sleep(mode, false);
 }
-
