@@ -606,7 +606,7 @@ static int cluster_select(struct lpm_cluster *cluster, bool from_idle)
 
 		best_level = i;
 
-		if (from_idle && sleep_us <= pwr_params->max_residency)
+		if (sleep_us <= pwr_params->max_residency)
 			break;
 	}
 
@@ -1550,5 +1550,4 @@ void lpm_cpu_hotplug_enter(unsigned int cpu)
 
 	msm_cpu_pm_enter_sleep(mode, false);
 }
-
 
